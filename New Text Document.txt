@@ -1,0 +1,17 @@
+import bpy
+
+
+bpy.ops.keentools_facebuilder.add_head()
+face = bpy.context.active_object
+
+mat = bpy.data.materials.new(name = "Material")
+face.data.materials.append(mat)
+mat.use_nodes = True
+
+
+
+
+nodes = mat.node_tree.nodes
+
+nodes["Principled BSDF"].inputs[0].default_value = (0.746246, 0.8, 0, 1)
+

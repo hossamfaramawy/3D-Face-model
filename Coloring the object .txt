@@ -1,0 +1,33 @@
+import bpy
+
+
+#removing all materials
+for m in bpy.data.materials:
+    bpy.data.materials.remove(m)
+
+#deleting any objects
+bpy.ops.object.select_all(action='SELECT') 
+bpy.ops.object.delete() 
+
+#creation of the object
+bpy.ops.mesh.primitive_cube_add(enter_editmode=False, align='WORLD', location=(0, 0, 0), scale=(1, 1, 1))
+
+#selecting the object
+cube = bpy.data.objects["Cube"].select_set(True)
+
+#creation of material
+bpy.ops.material.new()
+
+#assign the material to variable
+mat = bpy.data.materials["Material"]
+
+#checking the nodes are true
+mat.use_nodes = True
+nodes = mat.node_tree.nodes
+
+#using the nodes to change the value of colors
+nodes["Principled BSDF"].inputs[0].default_value = (0.222, 0.9, 0.8, 1)
+
+#assigning the object to the material that was created
+ob = bpy.context.object.data.materials.append(mat)
+

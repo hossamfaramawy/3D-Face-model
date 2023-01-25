@@ -1,0 +1,135 @@
+import bpy
+import os
+import cv2
+
+#C:\\Users\\pc\\Desktop\\blender\\
+****IMPORTANT****
+#when taking the image taking skin color and hair (could be in another python file and added here or send it here as value)
+
+#detection of skin color
+
+#We can send the color of skin then  do the same for hair
+
+
+#importing the obj
+file_loc = 'C:\\Users\\pc\\Desktop\\blender\\untitled.obj'
+imported_object = bpy.ops.import_scene.obj(filepath=file_loc)
+obj_object = bpy.context.selected_objects[0]
+
+
+#selecting the object
+behindFace = bpy.data.objects["FaceBuilderHead_FaceBuilderHead_mesh"].select_set(True)
+
+#creation of material
+#bpy.ops.material.new()
+#assign the material to variable
+mat = bpy.data.materials["(null)"]
+
+#checking the nodes are true
+mat.use_nodes = True
+nodes = mat.node_tree.nodes
+
+#using the nodes to change the value of colors
+nodes["Principled BSDF"].inputs[0].default_value = (0.222, 0.9, 0.8, 1)
+
+#assigning the object to the material that was created
+#ob = bpy.context.object.data.materials.append(mat)
+
+#adding the face into the blender
+bpy.ops.keentools_facebuilder.add_head()
+#saving the face into blender
+face = bpy.context.active_object
+
+
+#removing the scalp and neck 
+bpy.context.scene.keentools_fb_settings.heads[0].masks[6] = False
+bpy.context.scene.keentools_fb_settings.heads[0].masks[4] = False
+bpy.context.scene.keentools_fb_settings.heads[0].masks[0] = False
+
+
+
+
+
+
+
+
+****IMPORTANT****
+"""
+#fixing the line between the scalp neck and the face objects and joining however materials aren't separated that's why it's kinda useless leave it as it is
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.join()
+"""
+
+#creating the texture 
+{
+#adding the image
+
+
+
+#going into pin mode
+
+#auto assign
+bpy.ops.keentools_facebuilder.pickmode_starter(headnum=0, camnum=0)
+
+#expanding the edges
+bpy.context.scene.keentools_fb_settings.tex_uv_expand_percents = 10
+
+#creating the texturing
+bpy.ops.keentools_facebuilder.bake_tex(headnum=0)
+
+bpy.ops.keentools_facebuilder.tex_selector(headnum=0)
+#export the texture for the 
+
+
+}
+
+
+
+
+"""EXTRA ADDITIONAL DETAILS"""
+
+#Coloring the face if having swalef or beard
+
+""""""""""""""""""""""""""""""""""
+
+#exporting the normal one
+
+
+#directory into variable
+directory = os.path.dirname("C:\\Users\\pc\\Desktop\\blender\\")
+
+#making the new obj file that will be saved into
+target_file = os.path.join(directory, 'DefaultFace.obj')
+
+#saving the obj into the export file
+bpy.ops.export_scene.obj(filepath=target_file)
+
+#export the texture as well 
+bpy.ops.keentools_facebuilder.texture_file_export(filepath="C:\\Users\\pc\\Desktop\\blender\\kt_facebuilder_texture.png")
+
+
+
+
+
+#adding the new obj hair 
+
+#importing the new hair
+file_loc = 'C:\\Users\\pc\\Desktop\\blender\\untitled.obj'
+imported_object = bpy.ops.import_scene.obj(filepath=file_loc)
+obj_object = bpy.context.selected_objects[0]
+
+
+"""""""""""""""""""""
+If needed we will adjust the paramaters of the hair
+
+"""""""""""""""""""""
+
+
+#colorized the default hair with hair's color with the detection
+
+
+#colorized if needed here afterwards exporting it 
+
+
+
+

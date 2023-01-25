@@ -1,0 +1,14 @@
+import bpy
+import os
+
+#directory into variable
+directory = os.path.dirname("C:\\Users\\Amr\\Downloads\\uploads_files_2545466_FemaleHairPonytail\\FemaleHairPonytail\\OBJ\\")
+
+#making the new obj file that will be saved into
+target_file = os.path.join(directory, 'myfile.obj')
+
+#saving the obj into the export file
+bpy.ops.export_scene.obj(filepath=target_file)
+
+#export the texture as well 
+bpy.ops.keentools_facebuilder.texture_file_export(filepath="C:\\Users\\Amr\\Downloads\\kt_facebuilder_texture.png")

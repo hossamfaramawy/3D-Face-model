@@ -1,0 +1,86 @@
+import bpy
+import os
+
+from keentools_facebuilder.fbloader import FBLoader
+from keentools_facebuilder.config import Config, get_main_settings, get_operator
+from keentools_facebuilder.settings import FBSceneSettings
+from keentools_facebuilder.utils.exif_reader import (read_exif_to_camera,auto_setup_camera_from_exif)
+from keentools_facebuilder.utils.other import restore_ui_elements
+from keentools_facebuilder.utils.materials import find_bpy_image_by_name
+from keentools_facebuilder.utils.blendshapes import load_csv_animation_to_blendshapes
+
+def enterface():
+    file_loc = 'C:\\Users\\pc\\Downloads\\dd\\blender\\untitled.obj'
+    imported_object = bpy.ops.import_scene.obj(filepath=file_loc)
+    obj_object = bpy.context.selected_objects[0]
+
+
+    #selecting the object
+    behindFace = bpy.data.objects["FaceBuilderHead_FaceBuilderHead_mesh"].select_set(True)
+
+    #creation of material
+    mat = bpy.data.materials["(null)"]
+
+    #checking the nodes are true
+    mat.use_nodes = True
+    nodes = mat.node_tree.nodes
+
+    #using the nodes to change the value of colors
+    nodes["Principled BSDF"].inputs[0].default_value = (0.222, 0.9, 0.8, 1)
+
+    #assigning the object to the material that was created
+    #ob = bpy.context.object.data.materials.append(mat)
+
+    #adding the face into the blender
+    bpy.ops.keentools_facebuilder.add_head()
+    #saving the face into blender
+    face = bpy.context.active_object
+
+
+    #removing the scalp and neck 
+    bpy.context.scene.keentools_fb_settings.heads[0].masks[6] = False
+    bpy.context.scene.keentools_fb_settings.heads[0].masks[4] = False
+    bpy.context.scene.keentools_fb_settings.heads[0].masks[0] = False
+
+
+
+
+
+class exec():
+    headnum = 0
+    def execute(self):
+            
+        filepath='C:\\Users\\pc\\Desktop\\blender\\GettyImages-1092658864_hero-1024x575.jpg'
+        
+        head = FBLoader.load_model(0)
+    
+        
+        camera = FBLoader.add_new_camera_with_image(self.headnum,filepath)
+        """
+        camera.orientation = camera.exif.orientation
+
+
+        for i, camera in enumerate(head.cameras):
+            if i > last_camnum:
+                auto_setup_camera_from_exif(camera)
+                FBLoader.center_geo_camera_projection(0, i)
+       """
+             
+        bpy.ops.keentools_facebuilder.pickmode_starter(headnum=0, camnum=0)
+
+        #expanding the edges
+        bpy.context.scene.keentools_fb_settings.tex_uv_expand_percents = 10
+
+        #creating the texturing
+        bpy.ops.keentools_facebuilder.bake_tex(headnum=0)
+
+        bpy.ops.keentools_facebuilder.tex_selector(headnum=0)
+
+
+
+if __name__ =='__main__':
+    enterface()
+    instance= exec()
+    instance.execute()
+            
+  
